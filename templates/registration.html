@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <script src="modals.js"></script>
     <title>Bus Tickets</title>
 </head>
 <body>
@@ -18,13 +19,23 @@
   </div>
   <!-- NAVBAR STOP -->
 
-  <!-- LOGIN FORM START -->
+  <!-- REGISTRATION FORM START -->
   <form method="post">
     <h2>Create an account</h2>
     <input type="email" name="registerFormEmail" id="registerFormEmail" placeholder="Email address">
     <input type="password" name="registerFormPassword" id="registerFormPassword" placeholder="Password">
     <button type="submit">Create</button>
   </form>
-  <!-- LOGIN FORM STOP -->
+  <!-- REGISTRATION FORM STOP -->
+
+  <button id="open-modal">Open Modal</button>
+
+  <div class="modal-container" id="modal-container">
+    <div class="modal">
+      <h1>Password incorrect!</h1>
+      <p>The password is too long.</p>
+      <button id="close-modal">Close</button>
+    </div>
+  </div>
 </body>
 </html>

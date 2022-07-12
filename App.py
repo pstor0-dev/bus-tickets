@@ -1,5 +1,5 @@
-from flask import Flask, make_response, render_template, url_for, redirect, request
 import sqlite3
+from flask import Flask, abort, make_response, render_template, url_for, redirect, request
 
 # Flask
 app = Flask(__name__)
@@ -10,6 +10,17 @@ cur = con.cursor()
 
 cur.execute('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, pass TEXT (32), balance INTEGER (1000000) DEFAULT (0))')
 con.commit()
+
+# Error code handlers
+
+# Static files
+@app.route('/style.css')
+def custom_css_loading():
+    return redirect(url_for('static', filename='css/style.css'))
+
+@app.route('/modals.js')
+def modals_js_loading():
+    return redirect(url_for('static', filename='js/modals.js'))
 
 @app.route('/', methods=['GET', 'POST'])
 def index_page_processor():
@@ -72,21 +83,22 @@ def registration_page_processor():
         # Checking if the user is registered
         if user == []:
             # Password length check
-            if len(form_pass) < 8:
-                return 'The password is too short.'
-            elif len(form_pass) > 32:
+            if len(form_pass) > 32:
                 return 'The password is too long.'
 
             cur.execute('INSERT INTO users (email, pass) VALUES (?, ?)', (form_email, form_pass))
             con.commit()
-            return '<p>Account created successfully! <a href="/login">Sign In</a></p>'
+            resp = make_response(redirect('/profile'))
+            resp.set_cookie('logged_email', form_email)
+            resp.set_cookie('logged_status', 'True')
+            return resp
         else:
             return '<p>This email address is busy. <a href="/registration">Return</a></p>'
     else:
         return render_template('registration.html')
 
 @app.route('/profile', methods=['GET'])
-def profile_page_processor(balance=None):
+def profile_page_processor(balance=None, email=None):
     if request.cookies.get('logged_status') == 'True':
         logged_email = request.cookies.get('logged_email')
 
@@ -95,10 +107,11 @@ def profile_page_processor(balance=None):
         user = cur.fetchone()
 
         balance = user[3]
+        email = user[1]
 
-        return render_template('profile.html', balance=balance)
+        return render_template('profile.html', balance=balance, email=email)
     else:
-        return '<p><a href="/login">Login</a> to access your profile.</p>'
+        return abort(401)
 
 @app.route('/logout', methods=['GET'])
 def logout_page_processor():
@@ -107,8 +120,3 @@ def logout_page_processor():
         resp.delete_cookie('logged_status')
         resp.delete_cookie('logged_email')
         return resp
-
-# Static files loaders
-@app.route('/style.css')
-def custom_css_loading():
-    return redirect(url_for('static', filename='css/style.css'))
