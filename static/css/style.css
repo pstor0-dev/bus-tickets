@@ -7,14 +7,14 @@
 
 /* NAVBAR */
 
-nav {
+.navbar {
     margin: 0;
     padding: 0;
     overflow: hidden;
     background-color: #333;
 }
 
-nav ul {
+.navbar ul {
     list-style: none;
 }
 
@@ -50,18 +50,18 @@ nav ul {
     background-color: #04AA6D;
 }
 
-/* LOGIN FORM */
-.login-form {
-    display: grid;
-    justify-items: center;
-    justify-content: center;
+/* FORM */
+form {
+    display: block;
     border-radius: 5px;
-    background-color: #333;
+    border: 3px solid #ccc;
     padding: 20px;
     width: 200px;
+    margin-top: 100px;
+    margin-left: 530px;
 }
 
-.login-form input {
+form input {
     padding: 12px 20px;
     margin: 8px 0;
     border: 1px solid #ccc;
@@ -69,7 +69,7 @@ nav ul {
     box-sizing: border-box;
 }
 
-.login-form button {
+form button {
     background-color: #4CAF50;
     color: white;
     font-family: 'Roboto', sans-serif;
@@ -81,6 +81,10 @@ nav ul {
     cursor: pointer;
 }
 
-.login-form button:hover {
+form button:hover {
     background-color: #45a049;
+}
+
+form h2 {
+    font-family: 'Roboto', sans-serif;
 }
