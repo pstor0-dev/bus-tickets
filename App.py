@@ -9,6 +9,9 @@ app = Flask(__name__)
 con = sqlite3.connect('database.db', check_same_thread=False)
 cur = con.cursor()
 
+cur.execute('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, pass TEXT (32), balance INTEGER (1000000) DEFAULT (0))')
+con.commit()
+
 @app.route("/", methods=['GET', 'POST'])
 def index_page_processor():
     return render_template('login.html')
